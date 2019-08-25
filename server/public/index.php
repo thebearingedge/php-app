@@ -6,7 +6,7 @@ if (getenv('PHP_ENV') === 'development') {
   $file_path = $request['path'] === '/'
     ? __DIR__ . '/index.html'
     : __DIR__ . "/${request['path']}";
-  if (file_exists($file_path)) {
+  if (is_file($file_path)) {
     $file = fopen($file_path, 'r');
     fpassthru($file);
     fclose($file);
@@ -21,7 +21,7 @@ if (!preg_match('/^\/api\//', $request['path'])) {
 $resource = preg_replace('/^\/api\/_?/', '', $request['path']);
 $handler_path = __DIR__ . "/../api/${resource}.php";
 
-if (!file_exists($handler_path)) {
+if (!is_file($handler_path)) {
   throw new Error("Cannot ${request['method']} ${request['path']}", 404);
 }
 
