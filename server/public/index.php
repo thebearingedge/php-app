@@ -14,6 +14,10 @@ if (getenv('PHP_ENV') === 'development') {
   }
 }
 
+if (!preg_match('/^\/api\//', $request['path'])) {
+  throw new Error("Cannot ${request['method']} ${request['path']}", 404);
+}
+
 $resource = preg_replace('/^\/api\/_?/', '', $request['path']);
 $handler_path = __DIR__ . "/../api/${resource}.php";
 
