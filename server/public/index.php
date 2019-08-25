@@ -1,6 +1,6 @@
 <?php
 
-require_once __DIR__ . '/../api/_startup.php';
+require_once __DIR__ . '/../api/_lifecycle.php';
 
 if (getenv('PHP_ENV') === 'development') {
   $file_path = $request['path'] === '/'
