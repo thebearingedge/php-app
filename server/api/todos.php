@@ -1,5 +1,7 @@
 <?php
 
+require_once '_database.php';
+
 if ($request['method'] === 'GET') {
   $conn = get_database_connection();
   $query = 'SELECT * FROM `todos`';

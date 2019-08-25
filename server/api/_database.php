@@ -1,0 +1,18 @@
+<?php
+
+function get_database_connection() {
+  $db_url = getenv('DATABASE_URL');
+  $db_params = parse_url($db_url);
+  $host = $db_params['host'];
+  $user = $db_params['user'];
+  $pass = $db_params['pass'];
+  $port = $db_params['port'];
+  $database = ltrim($db_params['path'], '/');
+  $conn = mysqli_connect($host, $user, $pass, $database, $port);
+  if (!$conn) {
+    throw new Error('The API is down temporarily.', 503);
+  }
+  mysqli_set_charset($conn, 'utf8');
+  mysqli_options($conn, MYSQLI_OPT_INT_AND_FLOAT_NATIVE, true);
+  return $conn;
+}
