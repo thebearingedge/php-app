@@ -3,16 +3,11 @@
 require_once __DIR__ . '/../api/_lifecycle.php';
 require_once __DIR__ . '/../api/_errors.php';
 
-if (getenv('PHP_ENV') === 'development') {
-  $file_path = $request['path'] === '/'
-    ? __DIR__ . '/index.html'
-    : __DIR__ . "/${request['path']}";
-  if (is_file($file_path)) {
-    $file = fopen($file_path, 'r');
-    fpassthru($file);
-    fclose($file);
-    return true;
-  }
+if ($request['path'] === '/') {
+  $index = fopen(__DIR__ . '/index.html', 'r');
+  fpassthru($index);
+  fclose($index);
+  return true;
 }
 
 if (!preg_match('/^\/api\//', $request['path'])) {
