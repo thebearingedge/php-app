@@ -8,9 +8,8 @@ function get_database_connection() {
   $host = $db_params['host'];
   $user = $db_params['user'];
   $pass = $db_params['pass'];
-  $port = $db_params['port'];
   $database = ltrim($db_params['path'], '/');
-  $conn = mysqli_connect($host, $user, $pass, $database, $port);
+  $conn = mysqli_connect($host, $user, $pass, $database);
   if (!$conn) {
     throw new Error('The API is down temporarily.', 503);
   }
