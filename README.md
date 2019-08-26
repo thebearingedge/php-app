@@ -2,6 +2,9 @@
 
 An simple full stack application with a PHP JSON back end.
 
+### Live Deployment
+
+The app is deployed [on Heroku](https://php-app-example.herokuapp.com/).
 
 ### Requirements
 
