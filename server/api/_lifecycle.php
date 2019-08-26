@@ -15,7 +15,7 @@ $response = [
   ]
 ];
 
-function send($response) {
+function send(&$response) {
   http_response_code($response['status']);
   foreach ($response['headers'] as $key => $value) {
     header("$key: $value");
