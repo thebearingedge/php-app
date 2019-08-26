@@ -5,12 +5,8 @@ $request = [
   'path' => parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH),
   'headers' => getallheaders(),
   'query' => $_GET,
-  'body' => json_decode(file_get_contents('php://input'))
+  'body' => json_decode(file_get_contents('php://input')) ?? []
 ];
-
-if (empty($request['body'])) {
-  $request['body'] = [];
-}
 
 $response = [
   'status' => 200,
@@ -24,11 +20,8 @@ function send($response) {
   foreach ($response['headers'] as $key => $value) {
     header("$key: $value");
   }
-  if (empty($response['body'])) {
-    print(json_encode(new stdClass));
-  } else {
-    print(json_encode($response['body']));
-  }
+  $body = $response['body'] ?? new stdClass;
+  print(json_encode($body));
   exit;
 }
 
@@ -42,7 +35,7 @@ set_exception_handler(function ($error) {
     $message = $error->getMessage();
   }
   $response = [
-    'status' => $status ? $status : 500,
+    'status' => $status ?? 500,
     'headers' => [
       'Content-Type' => 'application/json; charset=utf-8'
     ],
