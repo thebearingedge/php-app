@@ -1,7 +1,9 @@
 <?php
 
 function get_database_connection() {
-  $db_url = getenv('DATABASE_URL');
+  $db_url = getenv('PHP_ENV') === 'development'
+    ? getenv('DATABASE_URL')
+    : getenv('CLEARDB_DATABASE_URL');
   $db_params = parse_url($db_url);
   $host = $db_params['host'];
   $user = $db_params['user'];
