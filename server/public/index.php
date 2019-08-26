@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/../api/_lifecycle.php';
+require_once __DIR__ . '/../api/_errors.php';
 
 if (getenv('PHP_ENV') === 'development') {
   $file_path = $request['path'] === '/'
@@ -15,16 +16,16 @@ if (getenv('PHP_ENV') === 'development') {
 }
 
 if (!preg_match('/^\/api\//', $request['path'])) {
-  throw new Error("Cannot ${request['method']} ${request['path']}", 404);
+  throw not_found("Cannot ${request['method']} ${request['path']}");
 }
 
 $resource = preg_replace('/^\/api\/_?/', '', $request['path']);
 $handler_path = __DIR__ . "/../api/${resource}.php";
 
 if (!is_file($handler_path)) {
-  throw new Error("Cannot ${request['method']} ${request['path']}", 404);
+  throw not_found("Cannot ${request['method']} ${request['path']}");
 }
 
 require_once $handler_path;
 
-throw new Error("Cannot ${request['method']} ${request['path']}", 404);
+throw not_found("Cannot ${request['method']} ${request['path']}");

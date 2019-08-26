@@ -1,7 +1,12 @@
+body {
+  font-family: sans-serif;
+}
+
 pre {
   box-sizing: border-box;
   padding: 1rem;
   border-radius: 0.25rem;
+  overflow-x: scroll;
   font-size: 1.25rem;
   background-color: lightgray;
 }
