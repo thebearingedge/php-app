@@ -1,7 +1,6 @@
 <?php
 
 require_once '_database.php';
-require_once '_errors.php';
 
 if ($request['method'] === 'GET') {
   $conn = get_database_connection();
