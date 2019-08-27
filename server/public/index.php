@@ -10,17 +10,10 @@ if ($request['path'] === '/') {
   return true;
 }
 
-if (!preg_match('/^\/api\//', $request['path'])) {
-  throw not_found("Cannot ${request['method']} ${request['path']}");
+switch ($request['path']) {
+  case '/api/echo':
+  case '/api/todos':
+    require_once __DIR__ . "/..${request['path']}.php";
+  default:
+    throw not_found("Cannot ${request['method']} ${request['path']}");
 }
-
-$resource = preg_replace('/^\/api\/_?/', '', $request['path']);
-$handler_path = __DIR__ . "/../api/${resource}.php";
-
-if (!is_file($handler_path)) {
-  throw not_found("Cannot ${request['method']} ${request['path']}");
-}
-
-require_once $handler_path;
-
-throw not_found("Cannot ${request['method']} ${request['path']}");
