@@ -1,7 +1,5 @@
 <?php
 
-require_once '_errors.php';
-
 function get_database_connection() {
   $db_url = getenv('PHP_ENV') === 'development'
     ? getenv('DATABASE_URL')

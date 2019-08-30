@@ -26,16 +26,18 @@ function send(&$response) {
 }
 
 set_exception_handler(function ($error) {
-  if ($error instanceof Exception) {
-    $status = 500;
-    $message = 'An unexpected error occurred.';
-    error_log($error->getMessage());
-  } else {
+  if ($error instanceof ApiError) {
     $status = $error->getCode();
     $message = $error->getMessage();
+    $previous = $error->getPrevious();
+    if ($previous) error_log($previous);
+  } else {
+    error_log($error);
+    $status = 500;
+    $message = 'An unexpected error occurred.';
   }
   $response = [
-    'status' => $status ?? 500,
+    'status' => $status,
     'headers' => [
       'Content-Type' => 'application/json; charset=utf-8'
     ],
@@ -45,3 +47,18 @@ set_exception_handler(function ($error) {
   ];
   send($response);
 });
+
+
+class ApiError extends Error {}
+
+function not_found($message) {
+  return new ApiError($message, 404);
+}
+
+function internal_server_error($message, $previous = null) {
+  return new ApiError($message, 500, $previous);
+}
+
+function service_unavailable($message) {
+  return new ApiError($message, 503);
+}

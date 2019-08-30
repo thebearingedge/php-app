@@ -1,7 +1,6 @@
 <?php
 
 require_once __DIR__ . '/../api/_lifecycle.php';
-require_once __DIR__ . '/../api/_errors.php';
 
 switch ($request['path']) {
   case '/':

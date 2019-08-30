@@ -7,7 +7,8 @@ if ($request['method'] === 'GET') {
   $query = 'SELECT * FROM `todos`';
   $result = mysqli_query($conn, $query);
   if (!$result) {
-    throw internal_server_error('Failed to retrieve `todos` data.');
+    $previous = new Error(mysqli_error($conn));
+    throw internal_server_error('Failed to retrieve `todos` data.', $previous);
   }
   $todos = [];
   while ($todo = mysqli_fetch_assoc($result)) {
