@@ -15,6 +15,7 @@ function get_database_connection() {
     throw service_unavailable('The API is temporarily down.');
   }
   mysqli_set_charset($conn, 'utf8');
+  mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
   mysqli_options($conn, MYSQLI_OPT_INT_AND_FLOAT_NATIVE, true);
   return $conn;
 }
