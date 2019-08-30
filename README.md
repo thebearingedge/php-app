@@ -29,3 +29,9 @@ The app is deployed [on Heroku](https://php-app-example.herokuapp.com/).
     ```shell
     ./dev.sh
     ```
+
+### Development Screenshot
+
+<p align="middle">
+  <img src="dx.png" alt="Developer Experience">
+</p>
