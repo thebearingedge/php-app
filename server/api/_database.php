@@ -11,7 +11,8 @@ function get_database_connection() {
   $user = $db_params['user'];
   $pass = $db_params['pass'];
   $database = ltrim($db_params['path'], '/');
-  $conn = mysqli_connect($host, $user, $pass, $database);
+  $port = $db_params['port'];
+  $conn = mysqli_connect($host, $user, $pass, $database, $port);
   if (!$conn) {
     throw service_unavailable('The API is temporarily down.');
   }
