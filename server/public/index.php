@@ -4,7 +4,7 @@ require_once __DIR__ . '/../api/_lifecycle.php';
 
 switch ($request['path']) {
   case '/':
-    readfile(__DIR__ . '/index.html');
+    readfile('index.html');
     exit;
   case '/api/echo':
   case '/api/todos':
