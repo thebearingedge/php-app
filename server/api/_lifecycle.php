@@ -5,7 +5,7 @@ $request = [
   'path' => parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH),
   'headers' => getallheaders(),
   'query' => $_GET,
-  'body' => json_decode(file_get_contents('php://input')) ?? []
+  'body' => json_decode(file_get_contents('php://input'), true)
 ];
 
 $response = [
@@ -26,6 +26,10 @@ function send(&$response) {
 }
 
 class ApiError extends Error {}
+
+function bad_request($message) {
+  return new ApiError($message, 400);
+}
 
 function not_found($message) {
   return new ApiError($message, 404);
