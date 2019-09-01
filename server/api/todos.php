@@ -1,26 +1,5 @@
 <?php
 
-if ($request['method'] === 'GET') {
-  if (!array_key_exists('id', $request['query'])) {
-    $link = get_db_link();
-    $todos = get_all_todos($link);
-    $response['body'] = $todos;
-    send($response);
-  } else {
-    $id = intval($request['query']['id']);
-    if (!$id) {
-      throw bad_request('`id` must be a positive integer.');
-    }
-    $link = get_db_link();
-    $todo = read_by_id($id, $link);
-    if (!$todo) {
-      throw not_found("Cannot find todo with `id` $id.");
-    }
-    $response['body'] = $todo;
-    send($response);
-  }
-}
-
 if ($request['method'] === 'POST') {
   $task = $request['body']['task'] ?? '';
   $isCompleted = $request['body']['isCompleted'] ?? false;
@@ -38,10 +17,31 @@ if ($request['method'] === 'POST') {
   send($response);
 }
 
+if ($request['method'] === 'GET') {
+  if (!array_key_exists('id', $request['query'])) {
+    $link = get_db_link();
+    $todos = read_all_todos($link);
+    $response['body'] = $todos;
+    send($response);
+  } else {
+    $id = intval($request['query']['id']);
+    if (!$id) {
+      throw bad_request('`id` must be a positive integer.');
+    }
+    $link = get_db_link();
+    $todo = read_by_id($id, $link);
+    if (!$todo) {
+      throw not_found("Cannot find todo with `id` $id.");
+    }
+    $response['body'] = $todo;
+    send($response);
+  }
+}
+
 if ($request['method'] === 'PUT') {
   $id = $request['query']['id'] ?? null;
   if (!intval($id)) {
-    throw bad_request('An integer `id` must be specifiied.');
+    throw bad_request('An integer `id` must be specified.');
   }
   $body = $request['body'];
   $required_fields = ['task', 'isCompleted'];
@@ -74,10 +74,10 @@ if ($request['method'] === 'DELETE') {
 }
 
 function create_todo($todo, $link) {
-  $query = "
+  $query = '
     INSERT INTO `todos` (`task`, `isCompleted`)
     VALUES (?, ?)
-  ";
+  ';
   $stmt = $link->prepare($query);
   $stmt->bind_param('si', $todo['task'], intval($todo['isCompleted']));
   $stmt->execute();
@@ -86,7 +86,7 @@ function create_todo($todo, $link) {
   return $created;
 }
 
-function get_all_todos($link) {
+function read_all_todos($link) {
   $query = 'SELECT * FROM `todos`';
   $result = $link->query($query);
   $todos = [];
@@ -121,10 +121,10 @@ function update_by_id($id, $updates, $link) {
     UPDATE `todos`
        SET `task` = ?,
            `isCompleted` = ?
-     WHERE `id` = ?
+     WHERE `id` = $id
   ';
   $stmt = $link->prepare($query);
-  $stmt->bind_param('sii', $updates['task'], $updates['isCompleted'], $id);
+  $stmt->bind_param('si', $updates['task'], $updates['isCompleted']);
   $stmt->execute();
   $updated = read_by_id($id, $link);
   return $updated;
