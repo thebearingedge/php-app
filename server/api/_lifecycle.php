@@ -15,13 +15,14 @@ $response = [
   ]
 ];
 
-function send(&$response) {
+function send($response) {
   http_response_code($response['status']);
   foreach ($response['headers'] as $key => $value) {
     header("$key: $value");
   }
-  $body = $response['body'] ?? new stdClass;
-  print(json_encode($body));
+  if (array_key_exists('body', $response)) {
+    print(json_encode($response['body']));
+  }
   exit;
 }
 

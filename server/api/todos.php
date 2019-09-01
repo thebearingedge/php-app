@@ -35,6 +35,7 @@ if ($request['method'] === 'POST') {
   ];
   $link = get_db_link();
   $created = create_todo($todo, $link);
+  $responst['status'] = 201;
   $response['body'] = $created;
   send($response);
 }
@@ -57,6 +58,20 @@ if ($request['method'] === 'PUT') {
     throw not_found("Cannot find todo with `id` $id.");
   }
   $response['body'] = $updated;
+  send($response);
+}
+
+if ($request['method'] === 'DELETE') {
+  $id = $request['query']['id'] ?? null;
+  if (!intval($id)) {
+    throw bad_request('An integer `id` must be specifiied.');
+  }
+  $link = get_db_link();
+  $deleted = delete_by_id($id, $link);
+  if (!$deleted) {
+    throw not_found("Cannot find todo with `id` $id.");
+  }
+  $response['status'] = 204;
   send($response);
 }
 
@@ -115,4 +130,13 @@ function update_by_id($id, $updates, $link) {
   $stmt->execute();
   $updated = read_by_id($id, $link);
   return $updated;
+}
+
+function delete_by_id($id, $link) {
+  $query = "
+    DELETE FROM `todos`
+          WHERE `id` = $id
+  ";
+  $link->query($query);
+  return $link->affected_rows > 0;
 }
