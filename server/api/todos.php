@@ -8,18 +8,19 @@ if ($request['method'] === 'GET') {
     $todos = get_all_todos($link);
     $response['body'] = $todos;
     send($response);
+  } else {
+    $id = intval($request['query']['id']);
+    if (!$id) {
+      throw bad_request('`id` must be a positive integer.');
+    }
+    $link = get_db_link();
+    $todo = read_by_id($id, $link);
+    if (!$todo) {
+      throw not_found("Cannot find todo with `id` $id.");
+    }
+    $response['body'] = $todo;
+    send($response);
   }
-  $id = intval($request['query']['id']);
-  if (!$id) {
-    throw bad_request('`id` must be a positive integer.');
-  }
-  $link = get_db_link();
-  $todo = read_by_id($id, $link);
-  if (!$todo) {
-    throw not_found("Cannot find todo with `id` $id.");
-  }
-  $response['body'] = $todo;
-  send($response);
 }
 
 if ($request['method'] === 'POST') {
