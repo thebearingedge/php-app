@@ -1,7 +1,5 @@
 <?php
 
-require_once '_database.php';
-
 if ($request['method'] === 'GET') {
   if (!array_key_exists('id', $request['query'])) {
     $link = get_db_link();
