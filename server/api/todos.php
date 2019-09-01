@@ -82,6 +82,7 @@ function create_todo($todo, $link) {
   $stmt->bind_param('si', $todo['task'], intval($todo['isCompleted']));
   $stmt->execute();
   $id = $stmt->insert_id;
+  $stmt->close();
   $created = read_by_id($id, $link);
   return $created;
 }
@@ -128,6 +129,7 @@ function update_by_id($id, $updates, $link) {
   $stmt = $link->prepare($query);
   $stmt->bind_param('si', $updates['task'], $updates['isCompleted']);
   $stmt->execute();
+  $stmt->close();
   $updated = read_by_id($id, $link);
   return $updated;
 }
