@@ -15,7 +15,7 @@ $response = [
   ]
 ];
 
-function send($response) {
+function send(&$response) {
   http_response_code($response['status']);
   if (!array_key_exists('body', $response)) {
     unset($response['headers']['Content-Type']);
@@ -43,9 +43,9 @@ function get_db_link() {
   if (!$link) {
     throw service_unavailable('The API is temporarily down.');
   }
-  mysqli_set_charset($link, 'utf8');
-  mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-  mysqli_options($link, MYSQLI_OPT_INT_AND_FLOAT_NATIVE, true);
+  $link->set_charset('utf8');
+  $link->options(MYSQLI_OPT_INT_AND_FLOAT_NATIVE, true);
+  $link->error_reporting(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
   return $link;
 }
 

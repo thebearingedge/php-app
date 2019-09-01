@@ -87,7 +87,9 @@ function create_todo($todo, $link) {
 }
 
 function read_all_todos($link) {
-  $query = 'SELECT * FROM `todos`';
+  $query = '
+    SELECT * FROM `todos`
+  ';
   $result = $link->query($query);
   $todos = [];
   while ($todo = $result->fetch_assoc()) {
