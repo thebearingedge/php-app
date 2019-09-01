@@ -17,6 +17,9 @@ $response = [
 
 function send($response) {
   http_response_code($response['status']);
+  if (!array_key_exists('body', $response)) {
+    unset($response['headers']['Content-Type']);
+  }
   foreach ($response['headers'] as $key => $value) {
     header("$key: $value");
   }
