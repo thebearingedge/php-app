@@ -1,6 +1,6 @@
 # php-app
 
-An simple full stack application with a PHP JSON back end.
+A simple full stack application with a PHP JSON back end.
 
 ### Live Deployment
 
@@ -19,12 +19,12 @@ The app is deployed [on Heroku](https://php-app-example.herokuapp.com/).
     git clone https://github.com/thebearingedge/php-app && \
     cd php-app/
     ```
-1. Copy `.env.example` to `.env`, changing values as needed.
+1. Copy `.env.example` to `.env`. Change variables if needed.
     ```shell
     cp .env.example .env
     ```
 1. Create your MySQL database.
-1. Import a MySQL dump file found in the `database/` directory.
+1. Import the MySQL dump file found in the `database/` directory.
 1. Start the PHP server with the `dev.sh` script.
     ```shell
     ./dev.sh
