@@ -79,7 +79,7 @@ function create_todo($todo, $link) {
     VALUES (?, ?)
   ';
   $stmt = $link->prepare($query);
-  $stmt->bind_param('si', $todo['task'], intval($todo['isCompleted']));
+  $stmt->bind_param('si', $todo['task'], $todo['isCompleted']);
   $stmt->execute();
   $id = $stmt->insert_id;
   $stmt->close();
