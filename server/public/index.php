@@ -6,7 +6,6 @@ switch ($request['path']) {
   case '/':
     readfile('index.html');
     exit;
-  case '/api/echo':
   case '/api/todos':
     require_once __DIR__ . "/..${request['path']}.php";
   default:
