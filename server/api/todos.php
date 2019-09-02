@@ -102,9 +102,7 @@ function read_all_todos($link) {
 
 function read_by_id($id, $link) {
   $query = "
-    SELECT `id`,
-           `task`,
-           `isCompleted`
+    SELECT *
       FROM `todos` WHERE `id` = {intval($id)}
   ";
   $result = $link->query($query);
