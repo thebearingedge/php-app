@@ -9,5 +9,5 @@ switch ($request['path']) {
   case '/api/todos':
     require_once __DIR__ . "/..${request['path']}.php";
   default:
-    throw not_found("Cannot ${request['method']} ${request['path']}");
+    throw new ApiError("Cannot ${request['method']} ${request['path']}", 404);
 }

@@ -41,7 +41,7 @@ function get_db_link() {
   $port = $db_params['port'];
   $link = mysqli_connect($host, $user, $pass, $database, $port);
   if (!$link) {
-    throw service_unavailable('The API is temporarily down.');
+    throw new ApiError('The API is temporarily down.', 503);
   }
   $link->set_charset('utf8');
   $link->options(MYSQLI_OPT_INT_AND_FLOAT_NATIVE, true);
@@ -50,18 +50,6 @@ function get_db_link() {
 }
 
 class ApiError extends Error {}
-
-function bad_request($message) {
-  return new ApiError($message, 400);
-}
-
-function not_found($message) {
-  return new ApiError($message, 404);
-}
-
-function service_unavailable($message) {
-  return new ApiError($message, 503);
-}
 
 set_exception_handler(function ($error) {
   if ($error instanceof ApiError) {

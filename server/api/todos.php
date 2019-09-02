@@ -4,7 +4,7 @@ if ($request['method'] === 'POST') {
   $task = $request['body']['task'] ?? '';
   $isCompleted = $request['body']['isCompleted'] ?? false;
   if (empty($task)) {
-    throw bad_request('`task` is a required field.');
+    throw new ApiError('`task` is a required field.', 400);
   }
   $todo = [
     'task' => $task,
@@ -26,12 +26,12 @@ if ($request['method'] === 'GET') {
   } else {
     $id = intval($request['query']['id']);
     if (!$id) {
-      throw bad_request('`id` must be a positive integer.');
+      throw new ApiError('`id` must be a positive integer.', 400);
     }
     $link = get_db_link();
     $todo = read_by_id($id, $link);
     if (!$todo) {
-      throw not_found("Cannot find todo with `id` $id.");
+      throw new ApiError("Cannot find todo with `id` $id.", 404);
     }
     $response['body'] = $todo;
     send($response);
@@ -41,19 +41,19 @@ if ($request['method'] === 'GET') {
 if ($request['method'] === 'PUT') {
   $id = $request['query']['id'] ?? null;
   if (!intval($id)) {
-    throw bad_request('An integer `id` must be specified.');
+    throw new ApiError('An integer `id` must be specified.', 400);
   }
   $body = $request['body'];
   $required_fields = ['task', 'isCompleted'];
   foreach ($required_fields as $field) {
     if (!array_key_exists($field, $body)) {
-      throw bad_request("`$field` is a required field.");
+      throw new ApiError("`$field` is a required field.", 400);
     }
   }
   $link = get_db_link();
   $updated = update_by_id($id, $body, $link);
   if (!$updated) {
-    throw not_found("Cannot find todo with `id` $id.");
+    throw new ApiError("Cannot find todo with `id` $id.", 400);
   }
   $response['body'] = $updated;
   send($response);
@@ -62,12 +62,12 @@ if ($request['method'] === 'PUT') {
 if ($request['method'] === 'DELETE') {
   $id = $request['query']['id'] ?? null;
   if (!intval($id)) {
-    throw bad_request('An integer `id` must be specifiied.');
+    throw new ApiError('An integer `id` must be specified.', 400);
   }
   $link = get_db_link();
   $deleted = delete_by_id($id, $link);
   if (!$deleted) {
-    throw not_found("Cannot find todo with `id` $id.");
+    throw new ApiError("Cannot find todo with `id` $id.", 404);
   }
   $response['status'] = 204;
   send($response);
