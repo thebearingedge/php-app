@@ -105,7 +105,7 @@ function read_by_id($id, $link) {
     SELECT `id`,
            `task`,
            `isCompleted`
-      FROM `todos` WHERE `id` = $id
+      FROM `todos` WHERE `id` = {intval($id)}
   ";
   $result = $link->query($query);
   $todo = $result->fetch_assoc();
@@ -120,12 +120,12 @@ function update_by_id($id, $updates, $link) {
   if (!$found) {
     return null;
   }
-  $query = '
+  $query = "
     UPDATE `todos`
        SET `task` = ?,
            `isCompleted` = ?
-     WHERE `id` = $id
-  ';
+     WHERE `id` = {intval($id)}
+  ";
   $stmt = $link->prepare($query);
   $stmt->bind_param('si', $updates['task'], $updates['isCompleted']);
   $stmt->execute();
@@ -137,7 +137,7 @@ function update_by_id($id, $updates, $link) {
 function delete_by_id($id, $link) {
   $query = "
     DELETE FROM `todos`
-          WHERE `id` = $id
+          WHERE `id` = {intval($id)}
   ";
   $link->query($query);
   return $link->affected_rows > 0;

@@ -45,7 +45,7 @@ function get_db_link() {
   }
   $link->set_charset('utf8');
   $link->options(MYSQLI_OPT_INT_AND_FLOAT_NATIVE, true);
-  $link->error_reporting(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+  mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
   return $link;
 }
 
