@@ -12,7 +12,7 @@ if ($request['method'] === 'POST') {
   ];
   $link = get_db_link();
   $created = create_todo($todo, $link);
-  $responst['status'] = 201;
+  $response['status'] = 201;
   $response['body'] = $created;
   send($response);
 }

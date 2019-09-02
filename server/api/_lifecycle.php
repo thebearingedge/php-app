@@ -5,7 +5,7 @@ $request = [
   'path' => parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH),
   'headers' => getallheaders(),
   'query' => $_GET,
-  'body' => json_decode(file_get_contents('php://input'), true)
+  'body' => json_decode(file_get_contents('php://input'), true) ?? []
 ];
 
 $response = [
@@ -17,7 +17,8 @@ $response = [
 
 function send(&$response) {
   http_response_code($response['status']);
-  if (!array_key_exists('body', $response)) {
+  if (empty($response['body'])) {
+    unset($response['body']);
     unset($response['headers']['Content-Type']);
   }
   foreach ($response['headers'] as $key => $value) {
@@ -38,8 +39,7 @@ function get_db_link() {
   $user = $db_params['user'];
   $pass = $db_params['pass'];
   $database = ltrim($db_params['path'], '/');
-  $port = $db_params['port'];
-  $link = mysqli_connect($host, $user, $pass, $database, $port);
+  $link = mysqli_connect($host, $user, $pass, $database);
   if (!$link) {
     throw new ApiError('The API is temporarily down.', 503);
   }
